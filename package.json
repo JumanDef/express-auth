@@ -1,0 +1,19 @@
+{
+  "name": "auth-express",
+  "version": "1.0.0",
+  "description": "Authorization in express for test",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JumanDef/express-auth.git"
+  },
+  "author": "Jumanazar Nizamidinov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JumanDef/express-auth/issues"
+  },
+  "homepage": "https://github.com/JumanDef/express-auth#readme"
+}
