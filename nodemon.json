@@ -1,0 +1,7 @@
+{
+  "ignore": [".git", "node_modules", "dist"],
+  "signal": "SIGTERM",
+  "env": { "NODE_ENV": "development" },
+  "ext": "ts",
+  "exec": "ts-node ./src/server.ts"
+}
