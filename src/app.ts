@@ -10,6 +10,7 @@ import DB from './DB/config';
 import { Routes } from './interfaces/routes.interface';
 import errorMiddleware from './middlewares/error.middleware';
 import { LoggerService } from './utils/logger';
+import path from 'path';
 
 export default class App {
   public app: express.Application;
@@ -52,6 +53,7 @@ export default class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan('dev'));
+    this.app.use(express.static(path.join(__dirname, 'uploads')));
     this.app.use(cors({ origin: '*', credentials: true }));
     this.app.use(helmet());
     this.app.use(json());

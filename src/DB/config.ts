@@ -2,6 +2,7 @@
 import Sequelize from 'sequelize';
 
 /* Internal dependencies */
+import FileModel from '../models/file.model';
 import UserModel from '../models/users.model';
 import { LoggerService } from '../utils/logger';
 
@@ -34,6 +35,7 @@ sequelize.authenticate();
 
 const DB = {
   Users: UserModel(sequelize),
+  Files: FileModel(sequelize),
   sequelize,
   Sequelize,
 };

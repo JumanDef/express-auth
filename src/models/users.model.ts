@@ -22,7 +22,7 @@ export default function (sequelize: Sequelize): typeof UserModel {
       },
       email: {
         allowNull: false,
-        type: DataTypes.STRING(45),
+        type: DataTypes.STRING(255),
         unique: true,
         validate: {
           isEmail: {

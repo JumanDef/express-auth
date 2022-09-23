@@ -51,6 +51,8 @@ export default class AuthService {
   public async getCurrentUser(userData: User): Promise<User> {
     const currenUser = await this.users.findOne({ where: { email: userData.email } });
 
+    if (!currenUser) throw new HttpException(400, 'There is not such user');
+
     return currenUser;
   }
 
