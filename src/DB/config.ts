@@ -1,7 +1,13 @@
 /* External dependencies */
-import { Sequelize } from 'sequelize';
+import Sequelize from 'sequelize';
 
-const connectionDB = new Sequelize('auth', 'root', '123', {
+/* Internal dependencies */
+import UserModel from '../models/users.model';
+import { LoggerService } from '../utils/logger';
+
+const logger = new LoggerService();
+
+export const sequelize = new Sequelize.Sequelize('auth', 'root', '123', {
   dialect: 'mysql',
   host: 'localhost',
   port: 3306,
@@ -17,24 +23,18 @@ const connectionDB = new Sequelize('auth', 'root', '123', {
     min: 0,
     max: 5,
   },
+  logQueryParameters: true,
+  logging: (query, time) => {
+    logger.info(time + 'ms' + ' ' + query);
+  },
+  benchmark: true,
 });
 
-connectionDB.authenticate();
+sequelize.authenticate();
 
 const DB = {
-  // Offices: OfficeModel(connectionDB),
-  // Requisites: RequisiteModel(connectionDB),
-  // Users: UserModel(connectionDB),
-  // UserStatistics: UserStatisticsModel(connectionDB),
-  // DepositStatistics: DepositStatisticsModel(connectionDB),
-  // Packages: PackageModel(connectionDB),
-  // UserPackages: UserPackagesModel(connectionDB),
-  // Earnings: EarningsModel(connectionDB),
-  // Transactions: TransactionsModel(connectionDB),
-  // Feedback: FeedbackModel(connectionDB),
-  // Withdraw: WithdrawModel(connectionDB),
-  // News: NewsModel(connectionDB),
-  connectionDB,
+  Users: UserModel(sequelize),
+  sequelize,
   Sequelize,
 };
 

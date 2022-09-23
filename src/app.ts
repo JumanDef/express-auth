@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import { json, urlencoded } from 'body-parser';
 import helmet from 'helmet';
+import morgan from 'morgan';
 
 /* Internal dependencies */
 import DB from './DB/config';
@@ -39,17 +40,18 @@ export default class App {
   }
 
   private connectToDatabase() {
-    DB.connectionDB
-      .sync()
+    DB.sequelize
+      .sync({ alter: true })
       .then(() => {
         this.logger.info('Database connection is established successfully');
       })
-      .catch((err) => {
+      .catch((err: Error) => {
         this.logger.error('There was an error with DB: ', err);
       });
   }
 
   private initializeMiddlewares() {
+    this.app.use(morgan('dev'));
     this.app.use(cors({ origin: '*', credentials: true }));
     this.app.use(helmet());
     this.app.use(json());
