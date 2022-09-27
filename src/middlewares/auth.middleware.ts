@@ -1,6 +1,6 @@
 /* External dependencies */
 import { NextFunction, Request, Response } from 'express';
-import Jwt, { verify } from 'jsonwebtoken';
+import Jwt from 'jsonwebtoken';
 
 /* Internal dependencies */
 import { SECRET_KEY } from './../common/index';
@@ -23,7 +23,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
 
     next();
   } catch (err) {
-    return new HttpException(400, 'Wrong authentication token');
+    next(new HttpException(401, 'You are not authorized!'));
   }
 };
 

@@ -24,8 +24,10 @@ export default class FileController {
   };
 
   public listFiles = async (req: Request, res: Response, next: NextFunction) => {
+    const { page, size } = req.query;
+
     try {
-      const query = getPagination(Number(req.query.page), Number(req.query.size));
+      const query = getPagination(Number(page), Number(size));
       const listFiles = await this.fileService.listFiles(query);
 
       res.status(200).json({ data: listFiles, status: 'success' });
@@ -68,6 +70,16 @@ export default class FileController {
       res.status(200);
 
       filestream.pipe(res);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const data = await this.fileService.update(Number(req.params.id), req.file);
+
+      res.status(200).json({ updatedFile: data });
     } catch (error) {
       next(error);
     }

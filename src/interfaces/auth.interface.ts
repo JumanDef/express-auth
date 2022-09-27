@@ -5,12 +5,16 @@ import { Request } from 'express';
 import { User } from './user.interface';
 
 export interface DataStoredInToken {
-  id: number;
+  email: string;
 }
 
 export interface TokenData {
   token: string;
-  expiresIn: number;
+  expiresIn: number | string;
+}
+
+export interface RefreshTokenData extends TokenData {
+  refreshToken: string;
 }
 
 export interface RequestWithUser extends Request {

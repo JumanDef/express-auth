@@ -17,9 +17,10 @@ export default class FileRoute implements Routes {
 
   private initializeRoutes() {
     this.router.post(`${this.path}/upload`, fileMiddleware, this.fileController.uploadFile);
-    this.router.get(`${this.path}/list`, fileMiddleware, this.fileController.listFiles);
-    this.router.get(`${this.path}/:id`, fileMiddleware, this.fileController.getFileById);
-    this.router.delete(`${this.path}/:id`, fileMiddleware, this.fileController.removeFile);
-    this.router.get(`${this.path}/download/:id`, fileMiddleware, this.fileController.download);
+    this.router.get(`${this.path}/list`, this.fileController.listFiles);
+    this.router.get(`${this.path}/:id`, this.fileController.getFileById);
+    this.router.delete(`${this.path}/delete/:id`, this.fileController.removeFile);
+    this.router.get(`${this.path}/download/:id`, this.fileController.download);
+    this.router.put(`${this.path}/update/:id`, fileMiddleware, this.fileController.update);
   }
 }

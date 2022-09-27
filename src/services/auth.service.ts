@@ -1,3 +1,5 @@
+import { RefreshTokenData } from './../interfaces/auth.interface';
+import { REFRESH_TOKEN_KEY } from './../common/index';
 /* External dependencies */
 import { compare, hash } from 'bcrypt';
 import Jwt from 'jsonwebtoken';
@@ -49,15 +51,15 @@ export default class AuthService {
   }
 
   public async getCurrentUser(userData: User): Promise<User> {
-    const currenUser = await this.users.findOne({ where: { email: userData.email } });
+    const currentUser = await this.users.findOne({ where: { email: userData.email } });
 
-    if (!currenUser) throw new HttpException(400, 'There is not such user');
+    if (!currentUser) throw new HttpException(400, 'There is not such user');
 
-    return currenUser;
+    return currentUser;
   }
 
   public createToken(user: User): TokenData {
-    const dataStoredInToken: DataStoredInToken = { id: user.id };
+    const dataStoredInToken: DataStoredInToken = { email: user.email };
     const expiresIn: number = 10 * 60;
 
     return { expiresIn, token: Jwt.sign(dataStoredInToken, SECRET_KEY, { expiresIn }) };
@@ -65,5 +67,20 @@ export default class AuthService {
 
   public createCookie(tokenData: TokenData): string {
     return `Authorization=${tokenData.token}; HttpOnly; Max-Age=${tokenData.expiresIn};`;
+  }
+
+  public async refreshToken(user: User): Promise<RefreshTokenData> {
+    const findUser: User = await this.users.findOne({ where: { email: user.email } });
+
+    if (!findUser) throw new HttpException(409, `You're email ${user.email} not found`);
+
+    const dataStoredInToken: DataStoredInToken = { email: user.email };
+    const refreshTokenexpiresIn: string = '30d';
+
+    return {
+      token: Jwt.sign(dataStoredInToken, REFRESH_TOKEN_KEY, { expiresIn: '10m' }),
+      refreshToken: Jwt.sign(dataStoredInToken, REFRESH_TOKEN_KEY, { expiresIn: refreshTokenexpiresIn }),
+      expiresIn: refreshTokenexpiresIn,
+    };
   }
 }

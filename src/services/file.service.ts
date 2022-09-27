@@ -74,4 +74,36 @@ export default class FileService {
 
     return findFile;
   }
+
+  public async update(id: number, file: any): Promise<any> {
+    const findOldFile = await this.files.findOne({ where: { id } });
+
+    if (!findOldFile) throw new HttpException(404, 'No such not found');
+
+    const [file_name, extension] = file.originalname.split('.');
+
+    const fileDataRecord: CreateFileDto = {
+      id: id,
+      file_name: file_name,
+      ext: extension,
+      mimeType: file.mimetype,
+      size: file.size,
+    };
+
+    const updateFile = await Promise.all([
+      this.files.update({ ...fileDataRecord }, { where: { id: id } }),
+
+      fs.unlink(
+        //@ts-ignore
+        path.join('./uploads', `${findOldFile.dataValues.file_name}.${findOldFile.dataValues.ext}`),
+        (err) => {
+          if (err) {
+            throw new HttpException(404, 'Error: ' + err);
+          }
+        }
+      ),
+    ]);
+
+    return await this.files.findOne({ where: { id } });
+  }
 }
